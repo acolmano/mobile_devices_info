@@ -15,14 +15,7 @@
     "device": {
       "step": {
         "user": {
-          "title": "Aggiungi dispositivo",
-          "menu_options": {
-            "registered": "Dispositivo registrato in HA",
-            "manual": "Dispositivo manuale (non registrato)"
-          }
-        },
-        "registered": {
-          "title": "Dispositivo registrato in HA",
+          "title": "Aggiungi dispositivo registrato",
           "description": "Seleziona il dispositivo mobile registrato in Home Assistant.",
           "data": {
             "device_id": "Dispositivo",
@@ -30,8 +23,22 @@
             "notificare": "Abilita notifiche push"
           }
         },
-        "manual": {
-          "title": "Aggiungi device manuale",
+        "reconfigure": {
+          "title": "Modifica dispositivo registrato",
+          "data": {
+            "phone_number": "Numero di telefono (es. +393331234567)",
+            "notificare": "Abilita notifiche push"
+          }
+        }
+      },
+      "abort": {
+        "no_devices_available": "Tutti i dispositivi mobile_app sono già stati configurati."
+      }
+    },
+    "manual_device": {
+      "step": {
+        "user": {
+          "title": "Aggiungi dispositivo manuale",
           "description": "Inserisci i dati del dispositivo non registrato in Home Assistant.",
           "data": {
             "custom_name": "Nome dispositivo",
@@ -41,14 +48,7 @@
           }
         },
         "reconfigure": {
-          "title": "Modifica dispositivo",
-          "data": {
-            "phone_number": "Numero di telefono (es. +393331234567)",
-            "notificare": "Abilita notifiche push"
-          }
-        },
-        "reconfigure_manual": {
-          "title": "Modifica device manuale",
+          "title": "Modifica dispositivo manuale",
           "data": {
             "custom_name": "Nome dispositivo",
             "note": "Note",
@@ -56,9 +56,6 @@
             "notifica_sms": "Abilita notifica SMS"
           }
         }
-      },
-      "abort": {
-        "no_devices_available": "Tutti i dispositivi mobile_app sono già stati configurati."
       }
     }
   }

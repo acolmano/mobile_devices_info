@@ -15,14 +15,7 @@
     "device": {
       "step": {
         "user": {
-          "title": "Add device",
-          "menu_options": {
-            "registered": "Registered HA device",
-            "manual": "Manual device (not registered)"
-          }
-        },
-        "registered": {
-          "title": "Registered HA device",
+          "title": "Add registered device",
           "description": "Select the mobile device registered in Home Assistant.",
           "data": {
             "device_id": "Device",
@@ -30,7 +23,21 @@
             "notificare": "Enable push notifications"
           }
         },
-        "manual": {
+        "reconfigure": {
+          "title": "Edit registered device",
+          "data": {
+            "phone_number": "Phone number (e.g. +393331234567)",
+            "notificare": "Enable push notifications"
+          }
+        }
+      },
+      "abort": {
+        "no_devices_available": "All mobile_app devices are already configured."
+      }
+    },
+    "manual_device": {
+      "step": {
+        "user": {
           "title": "Add manual device",
           "description": "Enter the details for a device not registered in Home Assistant.",
           "data": {
@@ -41,13 +48,6 @@
           }
         },
         "reconfigure": {
-          "title": "Edit device",
-          "data": {
-            "phone_number": "Phone number (e.g. +393331234567)",
-            "notificare": "Enable push notifications"
-          }
-        },
-        "reconfigure_manual": {
           "title": "Edit manual device",
           "data": {
             "custom_name": "Device name",
@@ -56,9 +56,6 @@
             "notifica_sms": "Enable SMS notification"
           }
         }
-      },
-      "abort": {
-        "no_devices_available": "All mobile_app devices are already configured."
       }
     }
   }
