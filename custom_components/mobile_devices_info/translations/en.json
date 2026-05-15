@@ -16,19 +16,37 @@
       "step": {
         "user": {
           "title": "Add device",
-          "description": "Select a mobile device and configure its details.",
+          "description": "Select a registered mobile device or choose 'Device not listed...' to add a manual contact.",
           "data": {
             "device_id": "Device",
             "phone_number": "Phone number (e.g. +393331234567)",
             "notificare": "Enable push notifications"
           }
         },
+        "manual": {
+          "title": "Add manual device",
+          "description": "Enter the details for a device not registered in Home Assistant.",
+          "data": {
+            "custom_name": "Device name",
+            "note": "Notes",
+            "phone_number": "Phone number (e.g. +393331234567)",
+            "notifica_sms": "Enable SMS notification"
+          }
+        },
         "reconfigure": {
           "title": "Edit device",
-          "description": "Update the device information.",
           "data": {
             "phone_number": "Phone number (e.g. +393331234567)",
             "notificare": "Enable push notifications"
+          }
+        },
+        "reconfigure_manual": {
+          "title": "Edit manual device",
+          "data": {
+            "custom_name": "Device name",
+            "note": "Notes",
+            "phone_number": "Phone number (e.g. +393331234567)",
+            "notifica_sms": "Enable SMS notification"
           }
         }
       },

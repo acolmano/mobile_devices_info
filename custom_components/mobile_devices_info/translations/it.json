@@ -16,19 +16,37 @@
       "step": {
         "user": {
           "title": "Aggiungi dispositivo",
-          "description": "Seleziona un dispositivo mobile e configura le sue informazioni.",
+          "description": "Seleziona un dispositivo mobile registrato in HA oppure scegli 'Device non elencato...' per aggiungere un contatto manuale.",
           "data": {
             "device_id": "Dispositivo",
             "phone_number": "Numero di telefono (es. +393331234567)",
             "notificare": "Abilita notifiche push"
           }
         },
+        "manual": {
+          "title": "Aggiungi device manuale",
+          "description": "Inserisci i dati del dispositivo non registrato in Home Assistant.",
+          "data": {
+            "custom_name": "Nome dispositivo",
+            "note": "Note",
+            "phone_number": "Numero di telefono (es. +393331234567)",
+            "notifica_sms": "Abilita notifica SMS"
+          }
+        },
         "reconfigure": {
           "title": "Modifica dispositivo",
-          "description": "Aggiorna le informazioni del dispositivo.",
           "data": {
             "phone_number": "Numero di telefono (es. +393331234567)",
             "notificare": "Abilita notifiche push"
+          }
+        },
+        "reconfigure_manual": {
+          "title": "Modifica device manuale",
+          "data": {
+            "custom_name": "Nome dispositivo",
+            "note": "Note",
+            "phone_number": "Numero di telefono (es. +393331234567)",
+            "notifica_sms": "Abilita notifica SMS"
           }
         }
       },

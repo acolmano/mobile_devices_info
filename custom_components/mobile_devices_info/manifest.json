@@ -1,7 +1,7 @@
 {
   "domain": "mobile_devices_info",
   "name": "Mobile Devices Info",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "documentation": "https://github.com/acolmano/mobile_devices_info",
   "issue_tracker": "https://github.com/acolmano/mobile_devices_info/issues",
   "dependencies": [],

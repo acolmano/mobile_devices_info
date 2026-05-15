@@ -33,28 +33,45 @@ class MobileDevicesSensor(SensorEntity):
         devices = []
         for subentry in self.config_entry.subentries.values():
             device_id = subentry.data.get("device_id")
-            if not device_id:
-                continue
-            device = dev_reg.devices.get(device_id)
-            if device is None:
-                _LOGGER.debug("Device %s non trovato nel registry", device_id)
-                continue
-            identity = next(
-                (ident[1] for ident in device.identifiers if ident[0] == "mobile_app"),
-                None,
-            )
-            notify_name = (
-                "notify.mobile_app_" + subentry.title.lower().replace(" ", "_")
-                if subentry.title else None
-            )
-            devices.append({
-                "name": subentry.title,
-                "identity": identity,
-                "notify_id": f"notify.mobile_app_{identity}" if identity else None,
-                "notify_name": notify_name,
-                "notificare": subentry.data.get("notificare", False),
-                "phone_number": subentry.data.get("phone_number"),
-            })
+
+            if device_id:
+                # Device registrato in HA
+                device = dev_reg.devices.get(device_id)
+                if device is None:
+                    _LOGGER.debug("Device %s non trovato nel registry", device_id)
+                    continue
+                identity = next(
+                    (ident[1] for ident in device.identifiers if ident[0] == "mobile_app"),
+                    None,
+                )
+                notify_name = (
+                    "notify.mobile_app_" + subentry.title.lower().replace(" ", "_")
+                    if subentry.title else None
+                )
+                devices.append({
+                    "name": subentry.title,
+                    "type": "registered",
+                    "identity": identity,
+                    "notify_id": f"notify.mobile_app_{identity}" if identity else None,
+                    "notify_name": notify_name,
+                    "notificare": subentry.data.get("notificare", False),
+                    "notifica_sms": False,
+                    "phone_number": subentry.data.get("phone_number"),
+                    "note": None,
+                })
+            else:
+                # Device non registrato (manuale)
+                devices.append({
+                    "name": subentry.data.get("custom_name") or subentry.title,
+                    "type": "manual",
+                    "identity": None,
+                    "notify_id": None,
+                    "notify_name": None,
+                    "notificare": False,
+                    "notifica_sms": subentry.data.get("notifica_sms", False),
+                    "phone_number": subentry.data.get("phone_number"),
+                    "note": subentry.data.get("note"),
+                })
         return devices
 
     @property
