@@ -1,0 +1,14 @@
+{
+  "title": "Informazioni dispositivi mobili",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurazione dispositivi notificabili",
+        "description": "Seleziona i dispositivi da notificare.",
+        "data": {
+          "all_ids": "Dispositivi notificabili"
+        }
+      }
+    }
+  }
+}

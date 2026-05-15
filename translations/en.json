@@ -1,0 +1,14 @@
+{
+  "title": "Mobile Devices Info",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Select devices to notify",
+        "description": "Choose which mobile_app devices should receive notifications.",
+        "data": {
+          "all_ids": "Devices"
+        }
+      }
+    }
+  }
+}

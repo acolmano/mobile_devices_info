@@ -1,0 +1,10 @@
+{
+  "domain": "mobile_devices_info",
+  "name": "Mobile Devices Info",
+  "version": "1.0.0",
+  "documentation": "",
+  "dependencies": [],
+  "codeowners": [],
+  "config_flow": true,
+  "requirements": []
+}
