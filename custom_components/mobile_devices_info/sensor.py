@@ -33,14 +33,20 @@ class MobileDevicesSensor(SensorEntity):
     async def _load_phone_numbers(self):
         self.phone_map = {}
         fritz_entry = next(
-            (e for e in self.hass.config_entries.async_entries("fritzsms") if e.data),
+            (e for e in self.hass.config_entries.async_entries("fritz_automation") if e.data),
             None,
         )
         if not fritz_entry:
-            _LOGGER.debug("Nessuna integrazione fritzsms trovata")
+            _LOGGER.debug("Nessuna integrazione fritz_automation trovata")
             return
 
-        for sub in fritz_entry.as_dict().get("subentries", []):
+        subentries = fritz_entry.as_dict().get("subentries", {})
+        if isinstance(subentries, dict):
+            items = subentries.values()
+        else:
+            items = subentries
+
+        for sub in items:
             data = sub.get("data", {})
             name = data.get("name")
             target = data.get("target")
