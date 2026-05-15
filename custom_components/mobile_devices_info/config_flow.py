@@ -7,6 +7,15 @@ from homeassistant.config_entries import (
 )
 from homeassistant.core import callback
 from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers.selector import (
+    BooleanSelector,
+    SelectSelector,
+    SelectSelectorConfig,
+    SelectSelectorMode,
+    TextSelector,
+    TextSelectorConfig,
+    TextSelectorType,
+)
 from . import DOMAIN
 
 
@@ -67,9 +76,16 @@ class DeviceSubentryFlowHandler(ConfigSubentryFlow):
             )
 
         schema = vol.Schema({
-            vol.Required("device_id"): vol.In(device_options),
-            vol.Optional("phone_number", default=""): str,
-            vol.Optional("notificare", default=False): bool,
+            vol.Required("device_id"): SelectSelector(
+                SelectSelectorConfig(
+                    options=[{"value": k, "label": v} for k, v in device_options.items()],
+                    mode=SelectSelectorMode.DROPDOWN,
+                )
+            ),
+            vol.Optional("phone_number", default=""): TextSelector(
+                TextSelectorConfig(type=TextSelectorType.TEL)
+            ),
+            vol.Optional("notificare", default=False): BooleanSelector(),
         })
 
         return self.async_show_form(step_id="user", data_schema=schema)
@@ -93,11 +109,13 @@ class DeviceSubentryFlowHandler(ConfigSubentryFlow):
             vol.Optional(
                 "phone_number",
                 default=subentry.data.get("phone_number") or "",
-            ): str,
+            ): TextSelector(
+                TextSelectorConfig(type=TextSelectorType.TEL)
+            ),
             vol.Optional(
                 "notificare",
                 default=subentry.data.get("notificare", False),
-            ): bool,
+            ): BooleanSelector(),
         })
 
         return self.async_show_form(step_id="reconfigure", data_schema=schema)
