@@ -6,7 +6,22 @@
         "title": "Select devices to notify",
         "description": "Choose which mobile_app devices should receive notifications.",
         "data": {
-          "all_ids": "Devices"
+          "notificare": "Devices to notify"
+        }
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Only one instance of this integration is allowed.",
+      "no_devices": "No mobile_app devices found."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Mobile Devices Options",
+        "description": "Select devices to notify and enter the phone number for each one (used for SMS via fritz_automation).",
+        "data": {
+          "notificare": "Devices to notify"
         }
       }
     }

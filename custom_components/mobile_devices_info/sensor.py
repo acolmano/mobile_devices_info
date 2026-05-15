@@ -10,7 +10,6 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
     sensor = MobileDevicesSensor(hass, entry)
-    await sensor._load_phone_numbers()
     await sensor.async_update_options()
     async_add_entities([sensor], True)
 
@@ -22,7 +21,6 @@ class MobileDevicesSensor(SensorEntity):
         self._attr_icon = "mdi:cellphone-information"
         self._devices = []
         self.dev_reg = None
-        self.phone_map = {}
 
     async def async_added_to_hass(self):
         self.dev_reg = async_get_device_registry(self.hass)
@@ -30,33 +28,7 @@ class MobileDevicesSensor(SensorEntity):
             self.config_entry.add_update_listener(self._async_options_updated)
         )
 
-    async def _load_phone_numbers(self):
-        self.phone_map = {}
-        fritz_entry = next(
-            (e for e in self.hass.config_entries.async_entries("fritz_automation") if e.data),
-            None,
-        )
-        if not fritz_entry:
-            _LOGGER.debug("Nessuna integrazione fritz_automation trovata")
-            return
-
-        subentries = fritz_entry.as_dict().get("subentries", {})
-        if isinstance(subentries, dict):
-            items = subentries.values()
-        else:
-            items = subentries
-
-        for sub in items:
-            data = sub.get("data", {})
-            name = data.get("name")
-            target = data.get("target")
-            if name and target:
-                self.phone_map[name] = target
-
-        _LOGGER.debug(f"Phone map aggiornata: {self.phone_map}")
-
     async def _async_options_updated(self, hass, entry):
-        await self._load_phone_numbers()
         await self.async_update_options()
         self.async_write_ha_state()
 
@@ -65,6 +37,7 @@ class MobileDevicesSensor(SensorEntity):
             self.dev_reg = async_get_device_registry(self.hass)
 
         notify_ids = set(self.config_entry.options.get("notificare", []))
+        phone_numbers = self.config_entry.options.get("phone_numbers", {})
 
         devices = []
         for device in self.dev_reg.devices.values():
@@ -75,7 +48,7 @@ class MobileDevicesSensor(SensorEntity):
                         identity = ident[1]
                         break
 
-                phone = self.phone_map.get(device.name, None)
+                phone = phone_numbers.get(device.id)
 
                 devices.append({
                     "name": device.name or "Unknown",

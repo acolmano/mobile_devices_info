@@ -6,7 +6,22 @@
         "title": "Configurazione dispositivi notificabili",
         "description": "Seleziona i dispositivi da notificare.",
         "data": {
-          "all_ids": "Dispositivi notificabili"
+          "notificare": "Dispositivi notificabili"
+        }
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "È già configurata un'istanza di questa integrazione.",
+      "no_devices": "Nessun dispositivo mobile_app trovato."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opzioni dispositivi mobili",
+        "description": "Seleziona i dispositivi da notificare e inserisci il numero di telefono associato a ciascuno (usato per SMS tramite fritz_automation).",
+        "data": {
+          "notificare": "Dispositivi da notificare"
         }
       }
     }
