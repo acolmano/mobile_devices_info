@@ -18,8 +18,6 @@ from homeassistant.helpers.selector import (
 )
 from . import DOMAIN
 
-_MANUAL_SENTINEL = "__manual__"
-
 
 class MobileDevicesInfoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
@@ -42,13 +40,33 @@ class MobileDevicesInfoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 class DeviceSubentryFlowHandler(ConfigSubentryFlow):
 
     async def async_step_user(self, user_input=None) -> SubentryFlowResult:
+        """Step 1: scegli tipo di dispositivo (registrato in HA o manuale)."""
+        if user_input is not None:
+            if user_input.get("device_type") == "manual":
+                return await self.async_step_manual()
+            return await self.async_step_registered()
+
+        schema = vol.Schema({
+            vol.Required("device_type", default="registered"): SelectSelector(
+                SelectSelectorConfig(
+                    options=[
+                        {"value": "registered", "label": "Dispositivo registrato in HA"},
+                        {"value": "manual", "label": "Dispositivo manuale (non registrato)"},
+                    ],
+                    mode=SelectSelectorMode.LIST,
+                )
+            ),
+        })
+        return self.async_show_form(step_id="user", data_schema=schema)
+
+    async def async_step_registered(self, user_input=None) -> SubentryFlowResult:
+        """Step 2a: seleziona dispositivo mobile_app registrato in HA."""
         device_registry = dr.async_get(self.hass)
         mobile_devices = [
             d for d in device_registry.devices.values()
             if any(ident[0] == "mobile_app" for ident in d.identifiers)
         ]
 
-        # Escludi device HA già configurati come subentry
         config_entry = self._get_entry()
         configured_ids = {
             sub.data["device_id"]
@@ -57,15 +75,15 @@ class DeviceSubentryFlowHandler(ConfigSubentryFlow):
         }
         available = [d for d in mobile_devices if d.id not in configured_ids]
 
-        device_options = [{"value": _MANUAL_SENTINEL, "label": "Device non elencato..."}]
-        device_options += [
+        if not available:
+            return self.async_abort(reason="no_devices_available")
+
+        device_options = [
             {"value": d.id, "label": d.name or d.name_by_user or "Dispositivo sconosciuto"}
             for d in sorted(available, key=lambda d: d.name or "")
         ]
 
         if user_input is not None:
-            if user_input["device_id"] == _MANUAL_SENTINEL:
-                return await self.async_step_manual()
             device_id = user_input["device_id"]
             device = device_registry.devices.get(device_id)
             return self.async_create_entry(
@@ -89,8 +107,7 @@ class DeviceSubentryFlowHandler(ConfigSubentryFlow):
             ),
             vol.Optional("notificare", default=False): BooleanSelector(),
         })
-
-        return self.async_show_form(step_id="user", data_schema=schema)
+        return self.async_show_form(step_id="registered", data_schema=schema)
 
     async def async_step_manual(self, user_input=None) -> SubentryFlowResult:
         if user_input is not None:

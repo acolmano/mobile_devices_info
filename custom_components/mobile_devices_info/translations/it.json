@@ -16,7 +16,14 @@
       "step": {
         "user": {
           "title": "Aggiungi dispositivo",
-          "description": "Seleziona un dispositivo mobile registrato in HA oppure scegli 'Device non elencato...' per aggiungere un contatto manuale.",
+          "description": "Scegli il tipo di dispositivo da aggiungere.",
+          "data": {
+            "device_type": "Tipo di dispositivo"
+          }
+        },
+        "registered": {
+          "title": "Dispositivo registrato in HA",
+          "description": "Seleziona il dispositivo mobile registrato in Home Assistant.",
           "data": {
             "device_id": "Dispositivo",
             "phone_number": "Numero di telefono (es. +393331234567)",
