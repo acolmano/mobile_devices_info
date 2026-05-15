@@ -2,9 +2,10 @@
   "domain": "mobile_devices_info",
   "name": "Mobile Devices Info",
   "version": "1.0.0",
-  "documentation": "",
+  "documentation": "https://github.com/acolmano/mobile_devices_info",
+  "issue_tracker": "https://github.com/acolmano/mobile_devices_info/issues",
   "dependencies": [],
-  "codeowners": [],
+  "codeowners": ["@acolmano"],
   "config_flow": true,
   "requirements": []
 }
