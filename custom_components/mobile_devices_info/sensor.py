@@ -43,10 +43,15 @@ class MobileDevicesSensor(SensorEntity):
                 (ident[1] for ident in device.identifiers if ident[0] == "mobile_app"),
                 None,
             )
+            notify_name = (
+                "notify.mobile_app_" + subentry.title.lower().replace(" ", "_")
+                if subentry.title else None
+            )
             devices.append({
                 "name": subentry.title,
                 "identity": identity,
                 "notify_id": f"notify.mobile_app_{identity}" if identity else None,
+                "notify_name": notify_name,
                 "notificare": subentry.data.get("notificare", False),
                 "phone_number": subentry.data.get("phone_number"),
             })
