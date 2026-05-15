@@ -45,7 +45,7 @@ class MobileDevicesSensor(SensorEntity):
                     None,
                 )
                 notify_name = (
-                    "notify.mobile_app_" + subentry.title.lower().replace(" ", "_")
+                    "notify.mobile_app_" + subentry.title.lower().replace(" ", "_").replace("-", "_")
                     if subentry.title else None
                 )
                 devices.append({
