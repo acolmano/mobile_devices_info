@@ -3,26 +3,37 @@
   "config": {
     "step": {
       "user": {
-        "title": "Configurazione dispositivi notificabili",
-        "description": "Seleziona i dispositivi da notificare.",
-        "data": {
-          "notificare": "Dispositivi notificabili"
-        }
+        "title": "Mobile Devices Info",
+        "description": "L'integrazione verrà aggiunta. Potrai configurare i singoli dispositivi subito dopo."
       }
     },
     "abort": {
-      "single_instance_allowed": "È già configurata un'istanza di questa integrazione.",
-      "no_devices": "Nessun dispositivo mobile_app trovato."
+      "single_instance_allowed": "È già configurata un'istanza di questa integrazione."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Opzioni dispositivi mobili",
-        "description": "Seleziona i dispositivi da notificare e inserisci il numero di telefono associato a ciascuno (usato per SMS tramite fritz_automation).",
-        "data": {
-          "notificare": "Dispositivi da notificare"
+  "config_subentries": {
+    "device": {
+      "step": {
+        "user": {
+          "title": "Aggiungi dispositivo",
+          "description": "Seleziona un dispositivo mobile e configura le sue informazioni.",
+          "data": {
+            "device_id": "Dispositivo",
+            "phone_number": "Numero di telefono (es. +393331234567)",
+            "notificare": "Abilita notifiche push"
+          }
+        },
+        "reconfigure": {
+          "title": "Modifica dispositivo",
+          "description": "Aggiorna le informazioni del dispositivo.",
+          "data": {
+            "phone_number": "Numero di telefono (es. +393331234567)",
+            "notificare": "Abilita notifiche push"
+          }
         }
+      },
+      "abort": {
+        "no_devices_available": "Tutti i dispositivi mobile_app sono già stati configurati."
       }
     }
   }

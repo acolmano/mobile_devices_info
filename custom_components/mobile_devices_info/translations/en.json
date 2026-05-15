@@ -3,26 +3,37 @@
   "config": {
     "step": {
       "user": {
-        "title": "Select devices to notify",
-        "description": "Choose which mobile_app devices should receive notifications.",
-        "data": {
-          "notificare": "Devices to notify"
-        }
+        "title": "Mobile Devices Info",
+        "description": "The integration will be added. You can configure individual devices right after."
       }
     },
     "abort": {
-      "single_instance_allowed": "Only one instance of this integration is allowed.",
-      "no_devices": "No mobile_app devices found."
+      "single_instance_allowed": "Only one instance of this integration is allowed."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Mobile Devices Options",
-        "description": "Select devices to notify and enter the phone number for each one (used for SMS via fritz_automation).",
-        "data": {
-          "notificare": "Devices to notify"
+  "config_subentries": {
+    "device": {
+      "step": {
+        "user": {
+          "title": "Add device",
+          "description": "Select a mobile device and configure its details.",
+          "data": {
+            "device_id": "Device",
+            "phone_number": "Phone number (e.g. +393331234567)",
+            "notificare": "Enable push notifications"
+          }
+        },
+        "reconfigure": {
+          "title": "Edit device",
+          "description": "Update the device information.",
+          "data": {
+            "phone_number": "Phone number (e.g. +393331234567)",
+            "notificare": "Enable push notifications"
+          }
         }
+      },
+      "abort": {
+        "no_devices_available": "All mobile_app devices are already configured."
       }
     }
   }

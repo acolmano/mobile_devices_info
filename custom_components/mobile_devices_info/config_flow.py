@@ -1,111 +1,103 @@
-import re
 import voluptuous as vol
 from homeassistant import config_entries
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigSubentryFlow,
+    SubentryFlowResult,
+)
 from homeassistant.core import callback
 from homeassistant.helpers import device_registry as dr
-from homeassistant.helpers import config_validation as cv
 from . import DOMAIN
-
-
-def _phone_key(device) -> str:
-    """Restituisce la chiave del campo telefono per un device."""
-    name = device.name or device.id
-    return "phone_" + re.sub(r"[^a-zA-Z0-9]", "_", name)
 
 
 class MobileDevicesInfoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     async def async_step_user(self, user_input=None):
-        # Singleton: impedisce la creazione di più istanze
         if self._async_current_entries():
             return self.async_abort(reason="single_instance_allowed")
+        if user_input is not None:
+            return self.async_create_entry(title="Mobile Devices Info", data={})
+        return self.async_show_form(step_id="user", data_schema=vol.Schema({}))
 
+    @classmethod
+    @callback
+    def async_get_supported_subentry_types(
+        cls, config_entry: ConfigEntry
+    ) -> dict[str, type[ConfigSubentryFlow]]:
+        return {"device": DeviceSubentryFlowHandler}
+
+
+class DeviceSubentryFlowHandler(ConfigSubentryFlow):
+
+    async def async_step_user(self, user_input=None) -> SubentryFlowResult:
         device_registry = dr.async_get(self.hass)
         mobile_devices = [
             d for d in device_registry.devices.values()
             if any(ident[0] == "mobile_app" for ident in d.identifiers)
         ]
 
-        if not mobile_devices:
-            return self.async_abort(reason="no_devices")
+        # Escludi device già configurati
+        config_entry = self._get_entry()
+        configured_ids = {
+            sub.data["device_id"]
+            for sub in config_entry.subentries.values()
+            if "device_id" in sub.data
+        }
+        available = [d for d in mobile_devices if d.id not in configured_ids]
+
+        if not available:
+            return self.async_abort(reason="no_devices_available")
 
         device_options = {
             d.id: d.name or d.name_by_user or "Dispositivo sconosciuto"
-            for d in mobile_devices
+            for d in sorted(available, key=lambda d: d.name or "")
         }
 
         if user_input is not None:
+            device_id = user_input["device_id"]
+            device = device_registry.devices.get(device_id)
             return self.async_create_entry(
-                title="Mobile Devices Info",
-                data={},
+                title=device.name if device else device_id,
+                data={
+                    "device_id": device_id,
+                    "phone_number": (user_input.get("phone_number") or "").strip() or None,
+                    "notificare": user_input.get("notificare", False),
+                },
             )
 
         schema = vol.Schema({
-            vol.Required("notificare", default=[]): cv.multi_select(device_options)
+            vol.Required("device_id"): vol.In(device_options),
+            vol.Optional("phone_number", default=""): str,
+            vol.Optional("notificare", default=False): bool,
         })
 
-        return self.async_show_form(
-            step_id="user",
-            data_schema=schema,
-            errors={},
-        )
+        return self.async_show_form(step_id="user", data_schema=schema)
 
-    @staticmethod
-    @callback
-    def async_get_options_flow(config_entry):
-        return MobileDevicesInfoOptionsFlowHandler(config_entry)
-
-
-class MobileDevicesInfoOptionsFlowHandler(config_entries.OptionsFlow):
-    def __init__(self, config_entry):
-        self.config_entry = config_entry
-
-    async def async_step_init(self, user_input=None):
-        device_registry = dr.async_get(self.hass)
-        mobile_devices = sorted(
-            [
-                d for d in device_registry.devices.values()
-                if any(ident[0] == "mobile_app" for ident in d.identifiers)
-            ],
-            key=lambda d: d.name or "",
-        )
-
-        device_options = {
-            d.id: d.name or d.name_by_user or "Dispositivo sconosciuto"
-            for d in mobile_devices
-        }
-
-        current_notify = self.config_entry.options.get("notificare", [])
-        current_phones = self.config_entry.options.get("phone_numbers", {})
+    async def async_step_reconfigure(self, user_input=None) -> SubentryFlowResult:
+        config_entry = self._get_entry()
+        subentry = self._get_reconfigure_subentry()
 
         if user_input is not None:
-            notificare = user_input.get("notificare", [])
-            phone_numbers = {}
-            for device in mobile_devices:
-                key = _phone_key(device)
-                phone = (user_input.get(key) or "").strip()
-                if phone:
-                    phone_numbers[device.id] = phone
-            return self.async_create_entry(
-                data={
-                    "notificare": notificare,
-                    "phone_numbers": phone_numbers,
-                }
+            return self.async_update_and_abort(
+                entry=config_entry,
+                subentry=subentry,
+                title=subentry.title,
+                data_updates={
+                    "phone_number": (user_input.get("phone_number") or "").strip() or None,
+                    "notificare": user_input.get("notificare", False),
+                },
             )
 
-        schema_dict = {
-            vol.Optional("notificare", default=current_notify): cv.multi_select(device_options),
-        }
-        for device in mobile_devices:
-            key = _phone_key(device)
-            current_phone = current_phones.get(device.id, "")
-            schema_dict[vol.Optional(key, default=current_phone)] = str
+        schema = vol.Schema({
+            vol.Optional(
+                "phone_number",
+                default=subentry.data.get("phone_number") or "",
+            ): str,
+            vol.Optional(
+                "notificare",
+                default=subentry.data.get("notificare", False),
+            ): bool,
+        })
 
-        schema = vol.Schema(schema_dict)
-
-        return self.async_show_form(
-            step_id="init",
-            data_schema=schema,
-            errors={},
-        )
+        return self.async_show_form(step_id="reconfigure", data_schema=schema)
