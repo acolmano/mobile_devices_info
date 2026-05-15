@@ -57,11 +57,11 @@ class DeviceSubentryFlowHandler(ConfigSubentryFlow):
         }
         available = [d for d in mobile_devices if d.id not in configured_ids]
 
-        device_options = [
+        device_options = [{"value": _MANUAL_SENTINEL, "label": "Device non elencato..."}]
+        device_options += [
             {"value": d.id, "label": d.name or d.name_by_user or "Dispositivo sconosciuto"}
             for d in sorted(available, key=lambda d: d.name or "")
         ]
-        device_options.append({"value": _MANUAL_SENTINEL, "label": "Device non elencato..."})
 
         if user_input is not None:
             if user_input["device_id"] == _MANUAL_SENTINEL:
