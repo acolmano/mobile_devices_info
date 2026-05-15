@@ -16,9 +16,9 @@
       "step": {
         "user": {
           "title": "Aggiungi dispositivo",
-          "description": "Scegli il tipo di dispositivo da aggiungere.",
-          "data": {
-            "device_type": "Tipo di dispositivo"
+          "menu_options": {
+            "registered": "Dispositivo registrato in HA",
+            "manual": "Dispositivo manuale (non registrato)"
           }
         },
         "registered": {

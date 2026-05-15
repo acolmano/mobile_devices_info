@@ -40,24 +40,11 @@ class MobileDevicesInfoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 class DeviceSubentryFlowHandler(ConfigSubentryFlow):
 
     async def async_step_user(self, user_input=None) -> SubentryFlowResult:
-        """Step 1: scegli tipo di dispositivo (registrato in HA o manuale)."""
-        if user_input is not None:
-            if user_input.get("device_type") == "manual":
-                return await self.async_step_manual()
-            return await self.async_step_registered()
-
-        schema = vol.Schema({
-            vol.Required("device_type", default="registered"): SelectSelector(
-                SelectSelectorConfig(
-                    options=[
-                        {"value": "registered", "label": "Dispositivo registrato in HA"},
-                        {"value": "manual", "label": "Dispositivo manuale (non registrato)"},
-                    ],
-                    mode=SelectSelectorMode.LIST,
-                )
-            ),
-        })
-        return self.async_show_form(step_id="user", data_schema=schema)
+        """Step 1: menu con bottoni — dispositivo registrato o manuale."""
+        return self.async_show_menu(
+            step_id="user",
+            menu_options=["registered", "manual"],
+        )
 
     async def async_step_registered(self, user_input=None) -> SubentryFlowResult:
         """Step 2a: seleziona dispositivo mobile_app registrato in HA."""
