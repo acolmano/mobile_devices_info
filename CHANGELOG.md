@@ -1,5 +1,15 @@
 # Changelog — Mobile Devices Info
 
+## v1.4.0 (2026-05-19)
+
+### ✨ Novità
+
+- Aggiunta selezione **notifiche SMS** nella maschera di configurazione di tutti i tipi di device (registrati e manuali)
+- La casella SMS è abilitabile solo se il numero di telefono ha almeno 10 cifre
+- Inserendo un numero troppo corto viene mostrato un avviso direttamente nel form
+
+---
+
 ## v1.1.0 (2026-05-15)
 
 ### 💥 Breaking change

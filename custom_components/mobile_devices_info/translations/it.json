@@ -20,16 +20,22 @@
           "data": {
             "device_id": "Dispositivo",
             "phone_number": "Numero di telefono (es. +393331234567)",
-            "notificare": "Abilita notifiche push"
+            "notificare": "Abilita notifiche push",
+            "notifica_sms": "Abilita notifiche SMS"
           }
         },
         "reconfigure": {
           "title": "Modifica dispositivo registrato",
           "data": {
             "phone_number": "Numero di telefono (es. +393331234567)",
-            "notificare": "Abilita notifiche push"
+            "notificare": "Abilita notifiche push",
+            "notifica_sms": "Abilita notifiche SMS"
           }
         }
+      },
+      "error": {
+        "phone_number_too_short": "Il numero di telefono deve contenere almeno 10 cifre.",
+        "sms_requires_valid_phone": "Le notifiche SMS richiedono un numero di telefono valido (almeno 10 cifre)."
       },
       "abort": {
         "no_devices_available": "Tutti i dispositivi mobile_app sono già stati configurati."
@@ -56,6 +62,10 @@
             "notifica_sms": "Abilita notifica SMS"
           }
         }
+      },
+      "error": {
+        "phone_number_too_short": "Il numero di telefono deve contenere almeno 10 cifre.",
+        "sms_requires_valid_phone": "Le notifiche SMS richiedono un numero di telefono valido (almeno 10 cifre)."
       }
     }
   }

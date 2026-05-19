@@ -20,16 +20,22 @@
           "data": {
             "device_id": "Device",
             "phone_number": "Phone number (e.g. +393331234567)",
-            "notificare": "Enable push notifications"
+            "notificare": "Enable push notifications",
+            "notifica_sms": "Enable SMS notifications"
           }
         },
         "reconfigure": {
           "title": "Edit registered device",
           "data": {
             "phone_number": "Phone number (e.g. +393331234567)",
-            "notificare": "Enable push notifications"
+            "notificare": "Enable push notifications",
+            "notifica_sms": "Enable SMS notifications"
           }
         }
+      },
+      "error": {
+        "phone_number_too_short": "Phone number must be at least 10 digits long.",
+        "sms_requires_valid_phone": "SMS notifications require a valid phone number (at least 10 digits)."
       },
       "abort": {
         "no_devices_available": "All mobile_app devices are already configured."
@@ -56,6 +62,10 @@
             "notifica_sms": "Enable SMS notification"
           }
         }
+      },
+      "error": {
+        "phone_number_too_short": "Phone number must be at least 10 digits long.",
+        "sms_requires_valid_phone": "SMS notifications require a valid phone number (at least 10 digits)."
       }
     }
   }
